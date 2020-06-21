@@ -278,18 +278,39 @@ function handleTileClick(event) {
                 // check flag match
                 var directions = [[1,0],[-1,0],[0,1],[0,-1],[1,1],[-1,-1],[1,-1],[-1,1]];
                 var flag_counter = 0;
+                var gameOver = false;
                 for(var i=0; i<directions.length; i++){
                     // get 
                     var newX = x + directions[i][0];
                     var newY = y + directions[i][1];
                     
-                    if(typeof(matrix[newX]) !== 'undefined' && typeof(matrix[newX][newY]) !== 'undefined' && matrix[newX][newY] === -1){
-                        var tileChecking = document.getElementById(newX+","+newY);
-                        if(tileChecking.classList.contains("flag")){
+                    var tileChecking = document.getElementById(newX+","+newY);
+                    if(typeof(matrix[newX]) !== 'undefined' && typeof(matrix[newX][newY]) !== 'undefined' && tileChecking.classList.contains("flag")){
+                        // correctly identify
+                        if(matrix[newX][newY] === -1){   
                             flag_counter++;
+                        }
+                        // wrong flag, game over
+                        else{
+                            tileChecking.classList.add("mine_marked");
+                            gameOver = true;
+                            
                         }
                         
                     }
+                }
+                if(gameOver){
+                    for(var i=0; i<directions.length; i++){
+                        // get 
+                        var newX = x + directions[i][0];
+                        var newY = y + directions[i][1];
+                        var tileChecking = document.getElementById(newX+","+newY);
+                        if(typeof(matrix[newX]) !== 'undefined' && typeof(matrix[newX][newY]) !== 'undefined' && tileChecking.classList.contains("hidden") && matrix[newX][newY] === -1){
+                            tileChecking.classList.add("mine_hit");
+                            
+                        }
+                    }
+                    showGameOver(newX,newY);
                 }
                 console.log("flag_counter = " + flag_counter);
                 console.log("matrix[x][y] = " + matrix[x][y]);
