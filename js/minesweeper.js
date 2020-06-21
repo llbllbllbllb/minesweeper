@@ -10,6 +10,7 @@ var totalMines = 10;
 var timer_id;
 
 var correctlyFlag = 0;
+var uncorrectlyFlag = 0;
 var remainedHidden = columns*rows;
 
 function buildGrid() {
@@ -41,6 +42,7 @@ function buildGrid() {
 
     remainedHidden = columns * rows;
     correctlyFlag = 0;
+    uncorrectlyFlag = 0;
 
     document.getElementById("flagCount").innerHTML = remainMines;
 
@@ -145,7 +147,8 @@ function checkWinning(){
     // return false;
     console.log("remainedHidden: " + remainedHidden);
     console.log("correctlyFlag: " + correctlyFlag);
-    if(remainedHidden + correctlyFlag === totalMines){
+    console.log("uncorrectlyFlag: " + uncorrectlyFlag);
+    if(uncorrectlyFlag === 0 && remainedHidden + correctlyFlag === totalMines){
         return true;
     }
     else{
@@ -259,7 +262,7 @@ function handleTileClick(event) {
                 showGameOver(x,y);
                 var banner = document.getElementById("banner");
                 banner.innerHTML = "Game Over :(";
-                clearInterval(timer_id);
+                
                 
             }
             else if(matrix[x][y] === 0){
@@ -341,6 +344,9 @@ function handleTileClick(event) {
             if(matrix[x][y] === -1){
                 correctlyFlag++;
             }
+            else{
+                uncorrectlyFlag++;
+            }
             remainedHidden--;
         }
         // if flag set hidden
@@ -350,6 +356,9 @@ function handleTileClick(event) {
             remainMines += 1;
             if(matrix[x][y] === -1){
                 correctlyFlag--;
+            }
+            else{
+                uncorrectlyFlag--;
             }
             remainedHidden++;
         }
@@ -368,6 +377,7 @@ function handleTileClick(event) {
 }
 
 function showGameOver(x,y){
+    clearInterval(timer_id);
     console.log("enter showGameOver()");
     for(var i=0; i<rows; i++){
         for(var j=0; j<columns; j++){
