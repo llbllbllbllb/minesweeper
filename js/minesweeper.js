@@ -271,7 +271,10 @@ function handleTileClick(event) {
             }
             else{
                 // show numbers
+                // console.log('here');
+                this.classList.remove("hidden");
                 this.classList.add("tile_"+matrix[x][y]);
+                remainedHidden--;
             }
         }
         else{
